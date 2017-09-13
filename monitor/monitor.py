@@ -18,14 +18,11 @@ async def conn():
         ('localhost', 6379), encoding = 'utf-8'
     )
 
-async funcs():
-    pass
-
 async def main():
     await conn()
 
     scheduler = aiojobs.create_scheduler()
-    
+
     while True:
         scheduler.spawn(funcs())
         await asyncio.sleep(600.0)
