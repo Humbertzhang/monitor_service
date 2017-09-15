@@ -11,6 +11,9 @@ from all_requests import *
 
 #Async Connect to redis
 async def main(loop):
+    '''
+    调用各个发送请求的函数
+    '''
     while True:
         await get_ele(loop)
         await get_apartments(loop)

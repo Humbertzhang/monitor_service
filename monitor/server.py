@@ -1,8 +1,12 @@
+'''
+将redis中的键值对返回为JSON格式
+并提供URL
+'''
+
 import asyncio
 from aiohttp import web
 import aioredis
 import pathlib
-import json
 
 #返回url:statuscode
 async def server(loop):
