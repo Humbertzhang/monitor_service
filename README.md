@@ -1,10 +1,12 @@
-#监控服务
+# 监控服务
 监控服务由两个部分组成：
 + 发送请求并储存在redis中
 + 作为服务端从redis中拿数据并响应GET请求
 
 URL: `localhost:3001/monitor`
+
 METHOD:GET
+
 RETURN DATA:
 
 ```
