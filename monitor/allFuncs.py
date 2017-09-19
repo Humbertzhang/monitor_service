@@ -2,6 +2,7 @@
 存放对所有服务请求的函数
 被monitor.py引用
 '''
+import emoji
 from passwords import *
 import asyncio
 import aiohttp
@@ -9,7 +10,23 @@ import aioredis
 import json
 
 
+ROBOT_WEBHOOK = 'https://oapi.dingtalk.com/robot/send?access_token=5bb2fe9804da9d054f0637a822b4a943a1491157b91293540093111e970dc96b'
 
+async def robot_sender(url, old_status, new_status):
+    if(old_status == 200 or old_status == 201):
+        if(new_status != old_status and new_status != 200 and new_status != 201):
+            txt = "<华师匣子API监控警报😱>\n\nAPI : {0} \n\n状态 : {1}\n".format(url, new_status)
+            txt = emoji.emojize(txt)
+            content = {
+                "msgtype":"text",
+                "text":{
+                    "content": txt
+                }
+            }
+
+            async with aiohttp.ClientSession() as session:
+                async with session.post(ROBOT_WEBHOOK, json = content) as resp:
+                    pass
 async def plain_request(url = None, postdata = None, header = None,loop = None):
     '''
     请求分类与中转.
@@ -34,6 +51,10 @@ async def plain_get(url, header = None, loop = None):
                 
                 redis = await aioredis.create_redis(
                     ('localhost', 6379), loop=loop )
+                
+                new_status = resp.status
+                old_status = int(redis.get(url, resp.status))
+                await robot_sender(url, old_status, new_status)
 
                 await redis.set(url, resp.status)
                 redis.close()
@@ -47,6 +68,10 @@ async def plain_get(url, header = None, loop = None):
 
                 redis = await aioredis.create_redis(
                     ('localhost', 6379), loop=loop )
+                
+                new_status = resp.status
+                old_status = int(redis.get(url, resp.status))
+                await robot_sender(url, old_status, new_status)
 
                 await redis.set(url, resp.status)
                 redis.close()
@@ -64,6 +89,10 @@ async def plain_post(url, postdata, header = None,loop = None):
                 redis = await aioredis.create_redis(
                     ('localhost', 6379), loop=loop )
 
+                new_status = resp.status
+                old_status = int(redis.get(url, resp.status))
+                await robot_sender(url, old_status, new_status)
+                
                 await redis.set(url, resp.status)
                 redis.close()
                 await redis.wait_closed()
@@ -76,6 +105,10 @@ async def plain_post(url, postdata, header = None,loop = None):
                 redis = await aioredis.create_redis(
                     ('localhost', 6379), loop=loop )
 
+                new_status = resp.status
+                old_status = int(redis.get(url, resp.status))
+                await robot_sender(url, old_status, new_status)
+                
                 await redis.set(url, resp.status)
                 redis.close()
                 await redis.wait_closed()
@@ -92,7 +125,7 @@ async def get_ele(loop = None):
             "type": "air"
     }
     await plain_request(url, post_data, loop = loop)
-
+    
 
 async def get_apartments(loop = None):
     '''

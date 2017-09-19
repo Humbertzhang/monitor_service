@@ -1,3 +1,4 @@
 '''
 MuxiStudio
 '''
+import allFuncs
