@@ -9,8 +9,12 @@ import aioredis
 import json
 from random import randint
 
+
+#钉钉机器人webhook
+#机器人API文档:https://open-doc.dingtalk.com/docs/doc.htm?spm=a219a.7629140.0.0.karFPe&treeId=257&articleId=105735&docType=1 
 ROBOT_WEBHOOK = 'https://oapi.dingtalk.com/robot/send?access_token=5bb2fe9804da9d054f0637a822b4a943a1491157b91293540093111e970dc96b'
 
+#用于机器人确定API名字
 url_to_name = {
     "https://ccnubox.muxixyz.com/api/ele/":"电费查询",
     "https://ccnubox.muxixyz.com/api/apartment/":"部门信息",
@@ -24,6 +28,7 @@ url_to_name = {
     "https://ccnubox.muxixyz.com/api/push/":"IOS推送"
 }
 
+#用于机器人推送图片
 pictures = [
     "http://wx3.sinaimg.cn/mw690/6a2a7a61gy1fjlkhk7239g201o01odg8.gif",
     "http://wx1.sinaimg.cn/mw690/6a2a7a61gy1fjlki839edg201o01ogm1.gif",
@@ -36,6 +41,7 @@ pictures = [
     "https://b-ssl.duitang.com/uploads/item/201702/10/20170210165755_anZwz.thumb.700_0.jpeg",
     "https://b-ssl.duitang.com/uploads/item/201702/02/20170202203304_NamXA.thumb.700_0.jpeg",
 ]
+
 async def robot_sender(url, old_status, new_status):
     if(old_status == 200 or old_status == 201):
         if(new_status != old_status and new_status != 200 and new_status != 201):
@@ -53,6 +59,7 @@ async def robot_sender(url, old_status, new_status):
             async with aiohttp.ClientSession() as session:
                 async with session.post(ROBOT_WEBHOOK, json = content) as resp:
                     pass
+
 async def plain_request(url = None, postdata = None, header = None,loop = None):
     '''
     请求分类与中转.
