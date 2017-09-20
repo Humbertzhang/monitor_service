@@ -2,7 +2,6 @@
 存放对所有服务请求的函数
 被monitor.py引用
 '''
-import emoji
 from passwords import *
 import asyncio
 import aiohttp
@@ -11,7 +10,6 @@ import json
 from random import randint
 
 ROBOT_WEBHOOK = 'https://oapi.dingtalk.com/robot/send?access_token=5bb2fe9804da9d054f0637a822b4a943a1491157b91293540093111e970dc96b'
-
 
 url_to_name = {
     "https://ccnubox.muxixyz.com/api/ele/":"电费查询",
@@ -26,17 +24,29 @@ url_to_name = {
     "https://ccnubox.muxixyz.com/api/push/":"IOS推送"
 }
 
-EMOJIS = ['😱', '😅', '🙂', '🤔', '😥', '😰', '🙈']
-
+pictures = [
+    "http://wx3.sinaimg.cn/mw690/6a2a7a61gy1fjlkhk7239g201o01odg8.gif",
+    "http://wx1.sinaimg.cn/mw690/6a2a7a61gy1fjlki839edg201o01ogm1.gif",
+    "http://wx3.sinaimg.cn/mw690/6a2a7a61gy1fjlki8nkkxg201o01odgb.gif",
+    "http://wx4.sinaimg.cn/mw690/6a2a7a61gy1fjlkhkdl93g201e01edfv.gif",
+    "http://wx2.sinaimg.cn/mw690/6a2a7a61gy1fjlkezjmfzg202z031jwn.gif",
+    "http://wx2.sinaimg.cn/mw690/6a2a7a61gy1fjic3u0g29j202x03c0su.jpg",
+    "http://wx2.sinaimg.cn/mw690/6a2a7a61gy1fjic3uj2xjj202g02s3yo.jpg",
+    "http://wx3.sinaimg.cn/mw690/6a2a7a61ly1fjbf9n1c4xj202i02kwet.jpg",
+    "https://b-ssl.duitang.com/uploads/item/201702/10/20170210165755_anZwz.thumb.700_0.jpeg",
+    "https://b-ssl.duitang.com/uploads/item/201702/02/20170202203304_NamXA.thumb.700_0.jpeg",
+]
 async def robot_sender(url, old_status, new_status):
     if(old_status == 200 or old_status == 201):
         if(new_status != old_status and new_status != 200 and new_status != 201):
-            txt = "华师匣子API监控警报{0}\n{1}API出现异常，状态码{2}\n".format(EMOJIS[randint(0,6)],url_to_name[url], new_status)
-            txt = emoji.emojize(txt)
+            picurl = "http://wx3.sinaimg.cn/mw690/6a2a7a61gy1fjlkhj49owg201o01o3zx.gif"
+            txt = "![picture]({0})\n[{1}]API出现异常，状态码[{2}]".format(pictures[randint(0,9)], url_to_name[url], new_status)
+            
             content = {
-                "msgtype":"text",
-                "text":{
-                    "content": txt
+                "msgtype":"markdown",
+                "markdown":{
+                    "title":"华师匣子API监控警报",
+                    "text": txt
                 }
             }
 
