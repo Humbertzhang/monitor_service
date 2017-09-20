@@ -8,14 +8,30 @@ import asyncio
 import aiohttp
 import aioredis
 import json
-
+from random import randint
 
 ROBOT_WEBHOOK = 'https://oapi.dingtalk.com/robot/send?access_token=5bb2fe9804da9d054f0637a822b4a943a1491157b91293540093111e970dc96b'
+
+
+url_to_name = {
+    "https://ccnubox.muxixyz.com/api/ele/":"电费查询",
+    "https://ccnubox.muxixyz.com/api/apartment/":"部门信息",
+    "https://ccnubox.muxixyz.com/api/webview_info/":"通知公告",
+    "https://ccnubox.muxixyz.com/api/site/":"常用网站",
+    "https://ccnubox.muxixyz.com/api/banner/":"Android获取Banner",
+    "https://ccnubox.muxixyz.com/api/calendar/":"获取日历",
+    "https://ccnubox.muxixyz.com/api/ios/calendar/":"IOS获取Banner",
+    "https://ccnubox.muxixyz.com/api/start/":"获取闪屏",
+    "https://ccnubox.muxixyz.com/api/push/register":"IOS推送用户注册",
+    "https://ccnubox.muxixyz.com/api/push/":"IOS推送"
+}
+
+EMOJIS = ['😱', '😅', '🙂', '🤔', '😥', '😰', '🙈']
 
 async def robot_sender(url, old_status, new_status):
     if(old_status == 200 or old_status == 201):
         if(new_status != old_status and new_status != 200 and new_status != 201):
-            txt = "<华师匣子API监控警报😱>\n\nAPI : {0} \n\n状态 : {1}\n".format(url, new_status)
+            txt = "华师匣子API监控警报{0}\n{1}API出现异常，状态码{2}\n".format(EMOJIS[randint(0,6)],url_to_name[url], new_status)
             txt = emoji.emojize(txt)
             content = {
                 "msgtype":"text",

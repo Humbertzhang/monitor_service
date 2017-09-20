@@ -1,4 +1,4 @@
-from allFuncs import *
+from allfuncs import *
 
 async def test_get():
     url = 'https://ccnubox.muxixyz.com/api/ele/'

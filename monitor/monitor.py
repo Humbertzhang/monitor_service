@@ -6,7 +6,7 @@ import asyncio
 import aiohttp
 import aioredis
 from passwords import b64_portalPass, b64_libPass, b64_admin
-from allFuncs import *
+from allfuncs import *
 
 
 #Async Connect to redis
